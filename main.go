@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 )
 
 func main() {
@@ -15,7 +16,9 @@ func main() {
 			field[k] = remainingBalls[n]
 			remainingBalls = append(remainingBalls[:n], remainingBalls[n+1:]...)
 		}
-		fmt.Println("Feld", f+1, ":", field)
+		sorted := field[:]
+		sort.Ints(sorted)
+		fmt.Println("Feld", f+1, ":", sorted)
 	}
 	fmt.Println("Übrig :", remainingBalls)
 }
