@@ -6,23 +6,14 @@ import (
 	"sort"
 )
 
-func drawNumbers(remainingNumbers *[]int) []int {
-	numbers := make([]int, 6)
-	for i := 0; i < 6; i++ {
-		n := rand.Intn(len(*remainingNumbers))
-		numbers[i] = (*remainingNumbers)[n]
-		*remainingNumbers = append((*remainingNumbers)[:n], (*remainingNumbers)[n+1:]...)
-	}
-	sort.Ints(numbers)
-	return numbers
-}
+type field []int
 
-func getFields(remainingNumbers *[]int) [][]int {
-	fields := make([][]int, 8)
-	for i := 0; i < 8; i++ {
-		fields[i] = drawNumbers(remainingNumbers)
+func (f field) String() string {
+	var str string
+	for _, number := range f {
+		str += fmt.Sprintf(" %02d", number)
 	}
-	return fields
+	return str
 }
 
 func main() {
@@ -32,4 +23,23 @@ func main() {
 		fmt.Println("Feld", index+1, ":", field)
 	}
 	fmt.Println("Übrig :", remainingNumbers)
+}
+
+func getFields(remainingNumbers *[]int) []field {
+	fields := make([]field, 8)
+	for i := 0; i < 8; i++ {
+		fields[i] = drawNumbers(remainingNumbers)
+	}
+	return fields
+}
+
+func drawNumbers(remainingNumbers *[]int) []int {
+	numbers := make([]int, 6)
+	for i := 0; i < 6; i++ {
+		n := rand.Intn(len(*remainingNumbers))
+		numbers[i] = (*remainingNumbers)[n]
+		*remainingNumbers = append((*remainingNumbers)[:n], (*remainingNumbers)[n+1:]...)
+	}
+	sort.Ints(numbers)
+	return numbers
 }
