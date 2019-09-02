@@ -15,20 +15,11 @@ func (f field) String() (s string) {
 	return
 }
 
-type ticket struct {
-	fields           []field
-	remainingNumbers []int
-}
+type ticket []field
 
 func (t ticket) String() (s string) {
-	for index, field := range t.fields {
+	for index, field := range t {
 		s += fmt.Sprintf("Field %d: %v\n", index+1, field)
-	}
-	if len(t.remainingNumbers) > 0 {
-		s += "Remaining: "
-		for _, number := range t.remainingNumbers {
-			s += fmt.Sprintf(" %02d", number)
-		}
 	}
 	return
 }
@@ -39,27 +30,29 @@ func main() {
 }
 
 func getTicket() (t ticket) {
-	allNumbers := [49]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49}
-	t.remainingNumbers = allNumbers[:]
+	availableNumbers := make([]int, 49)
+	for i := 0; i < len(availableNumbers); i++ {
+		availableNumbers[i] = i + 1
+	}
 	for {
-		numbers, ok := drawNumbers(&t.remainingNumbers)
+		numbers, ok := drawNumbers(&availableNumbers)
 		if !ok {
 			break
 		}
-		t.fields = append(t.fields, numbers)
+		t = append(t, numbers)
 	}
 	return
 }
 
-func drawNumbers(remainingNumbers *[]int) ([]int, bool) {
-	if len(*remainingNumbers) < 6 {
+func drawNumbers(availableNumbers *[]int) ([]int, bool) {
+	if len(*availableNumbers) < 6 {
 		return nil, false
 	}
 	numbers := make([]int, 6)
 	for i := 0; i < len(numbers); i++ {
-		n := rand.Intn(len(*remainingNumbers))
-		numbers[i] = (*remainingNumbers)[n]
-		*remainingNumbers = append((*remainingNumbers)[:n], (*remainingNumbers)[n+1:]...)
+		n := rand.Intn(len(*availableNumbers))
+		numbers[i] = (*availableNumbers)[n]
+		*availableNumbers = append((*availableNumbers)[:n], (*availableNumbers)[n+1:]...)
 	}
 	sort.Ints(numbers)
 	return numbers, true
