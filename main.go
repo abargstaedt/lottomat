@@ -8,24 +8,30 @@ import (
 
 type field []int
 
-func (f field) String() string {
-	var str string
+func (f field) String() (s string) {
 	for _, number := range f {
-		str += fmt.Sprintf(" %02d", number)
+		s += fmt.Sprintf(" %02d", number)
 	}
-	return str
+	return
+}
+
+type ticket []field
+
+func (t ticket) String() (s string) {
+	for index, field := range t {
+		s += fmt.Sprintf("Field %d: %v\n", index+1, field)
+	}
+	return
 }
 
 func main() {
 	allNumbers := [49]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49}
 	remainingNumbers := allNumbers[:]
-	for index, field := range getFields(&remainingNumbers) {
-		fmt.Println("Feld", index+1, ":", field)
-	}
-	fmt.Println("Übrig :", remainingNumbers)
+	fmt.Print(getTicket(&remainingNumbers))
+	fmt.Println("Remaining:", remainingNumbers)
 }
 
-func getFields(remainingNumbers *[]int) []field {
+func getTicket(remainingNumbers *[]int) ticket {
 	fields := make([]field, 8)
 	for i := 0; i < 8; i++ {
 		fields[i] = drawNumbers(remainingNumbers)
