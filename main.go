@@ -15,28 +15,36 @@ func (f field) String() (s string) {
 	return
 }
 
-type ticket []field
+type ticket struct {
+	fields           []field
+	remainingNumbers []int
+}
 
 func (t ticket) String() (s string) {
-	for index, field := range t {
+	for index, field := range t.fields {
 		s += fmt.Sprintf("Field %d: %v\n", index+1, field)
+	}
+	if len(t.remainingNumbers) > 0 {
+		s += "Remaining: "
+		for _, number := range t.remainingNumbers {
+			s += fmt.Sprintf(" %02d", number)
+		}
 	}
 	return
 }
 
 func main() {
-	allNumbers := [49]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49}
-	remainingNumbers := allNumbers[:]
-	fmt.Print(getTicket(&remainingNumbers))
-	fmt.Println("Remaining:", remainingNumbers)
+	fmt.Print(getTicket())
 }
 
-func getTicket(remainingNumbers *[]int) ticket {
-	fields := make([]field, 8)
+func getTicket() (t ticket) {
+	allNumbers := [49]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49}
+	t.fields = make([]field, 8)
+	t.remainingNumbers = allNumbers[:]
 	for i := 0; i < 8; i++ {
-		fields[i] = drawNumbers(remainingNumbers)
+		t.fields[i] = drawNumbers(&t.remainingNumbers)
 	}
-	return fields
+	return
 }
 
 func drawNumbers(remainingNumbers *[]int) []int {
