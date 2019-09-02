@@ -25,7 +25,7 @@ func (t ticket) String() (s string) {
 }
 
 func main() {
-	rand.Seed(42)
+	rand.Seed( /* put your lucky number here: */ 13)
 	fmt.Println(getTicket())
 }
 
