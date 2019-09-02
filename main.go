@@ -34,6 +34,7 @@ func (t ticket) String() (s string) {
 }
 
 func main() {
+	rand.Seed(42)
 	fmt.Println(getTicket())
 }
 
