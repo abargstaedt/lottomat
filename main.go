@@ -52,7 +52,7 @@ func getTicket() (t ticket) {
 
 func drawNumbers(remainingNumbers *[]int) []int {
 	numbers := make([]int, 6)
-	for i := 0; i < 6; i++ {
+	for i := 0; i < len(numbers); i++ {
 		n := rand.Intn(len(*remainingNumbers))
 		numbers[i] = (*remainingNumbers)[n]
 		*remainingNumbers = append((*remainingNumbers)[:n], (*remainingNumbers)[n+1:]...)
