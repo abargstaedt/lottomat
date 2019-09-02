@@ -42,15 +42,19 @@ func getTicket() (t ticket) {
 	allNumbers := [49]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49}
 	t.remainingNumbers = allNumbers[:]
 	for {
-		t.fields = append(t.fields, drawNumbers(&t.remainingNumbers))
-		if len(t.remainingNumbers) < 6 {
+		numbers, ok := drawNumbers(&t.remainingNumbers)
+		if !ok {
 			break
 		}
+		t.fields = append(t.fields, numbers)
 	}
 	return
 }
 
-func drawNumbers(remainingNumbers *[]int) []int {
+func drawNumbers(remainingNumbers *[]int) ([]int, bool) {
+	if len(*remainingNumbers) < 6 {
+		return nil, false
+	}
 	numbers := make([]int, 6)
 	for i := 0; i < len(numbers); i++ {
 		n := rand.Intn(len(*remainingNumbers))
@@ -58,5 +62,5 @@ func drawNumbers(remainingNumbers *[]int) []int {
 		*remainingNumbers = append((*remainingNumbers)[:n], (*remainingNumbers)[n+1:]...)
 	}
 	sort.Ints(numbers)
-	return numbers
+	return numbers, true
 }
