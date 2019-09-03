@@ -30,30 +30,33 @@ func main() {
 }
 
 func getTicket() (t ticket) {
-	availableNumbers := make([]int, 49)
-	for i := range availableNumbers {
-		availableNumbers[i] = i + 1
-	}
+	nextField := fieldGenerator()
 	for {
-		numbers, ok := drawNumbers(&availableNumbers)
+		field, ok := nextField()
 		if !ok {
 			break
 		}
-		t = append(t, numbers)
+		t = append(t, field)
 	}
 	return
 }
 
-func drawNumbers(availableNumbers *[]int) ([]int, bool) {
-	if len(*availableNumbers) < 6 {
-		return nil, false
+func fieldGenerator() func() (field, bool) {
+	availableNumbers := make([]int, 49)
+	for i := range availableNumbers {
+		availableNumbers[i] = i + 1
 	}
-	numbers := make([]int, 6)
-	for i := range numbers {
-		n := rand.Intn(len(*availableNumbers))
-		numbers[i] = (*availableNumbers)[n]
-		*availableNumbers = append((*availableNumbers)[:n], (*availableNumbers)[n+1:]...)
+	return func() (field, bool) {
+		if len(availableNumbers) < 6 {
+			return nil, false
+		}
+		numbers := make([]int, 6)
+		for i := range numbers {
+			n := rand.Intn(len(availableNumbers))
+			numbers[i] = (availableNumbers)[n]
+			availableNumbers = append((availableNumbers)[:n], (availableNumbers)[n+1:]...)
+		}
+		sort.Ints(numbers)
+		return numbers, true
 	}
-	sort.Ints(numbers)
-	return numbers, true
 }
