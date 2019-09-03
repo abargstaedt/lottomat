@@ -31,7 +31,7 @@ func main() {
 
 func getTicket() (t ticket) {
 	availableNumbers := make([]int, 49)
-	for i := 0; i < len(availableNumbers); i++ {
+	for i := range availableNumbers {
 		availableNumbers[i] = i + 1
 	}
 	for {
@@ -49,7 +49,7 @@ func drawNumbers(availableNumbers *[]int) ([]int, bool) {
 		return nil, false
 	}
 	numbers := make([]int, 6)
-	for i := 0; i < len(numbers); i++ {
+	for i := range numbers {
 		n := rand.Intn(len(*availableNumbers))
 		numbers[i] = (*availableNumbers)[n]
 		*availableNumbers = append((*availableNumbers)[:n], (*availableNumbers)[n+1:]...)
