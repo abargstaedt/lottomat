@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sort"
+	"time"
 )
 
 type field []int
@@ -25,7 +26,8 @@ func (t ticket) String() (s string) {
 }
 
 func main() {
-	rand.Seed( /* put your lucky number here: */ 13)
+	now := time.Now()
+	rand.Seed(now.UnixNano())
 	fmt.Println(getTicket())
 }
 
