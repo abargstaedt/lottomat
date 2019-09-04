@@ -44,21 +44,26 @@ func getTicket() (t ticket) {
 }
 
 func fieldGenerator() func() (field, bool) {
-	availableNumbers := make([]int, 49)
-	for i := range availableNumbers {
-		availableNumbers[i] = i + 1
-	}
+	availableNumbers := getNumbers(49)
 	return func() (field, bool) {
 		if len(availableNumbers) < 6 {
 			return nil, false
 		}
-		numbers := make([]int, 6)
-		for i := range numbers {
+		field := make([]int, 6)
+		for i := range field {
 			n := rand.Intn(len(availableNumbers))
-			numbers[i] = (availableNumbers)[n]
+			field[i] = (availableNumbers)[n]
 			availableNumbers = append((availableNumbers)[:n], (availableNumbers)[n+1:]...)
 		}
-		sort.Ints(numbers)
-		return numbers, true
+		sort.Ints(field)
+		return field, true
 	}
+}
+
+func getNumbers(len int) []int {
+	numbers := make([]int, len)
+	for i := range numbers {
+		numbers[i] = i + 1
+	}
+	return numbers
 }
